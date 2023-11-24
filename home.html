@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+             background: url(img.jpg) no-repeat;
+    background-size: cover;
+    background-position: center;
+        }
+
+        #container {
+            text-align: center;
+            border: 2px solid #333;
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(4px);
+        }
+
+        #result {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Number Guessing Game</h1>
+        <p>Guess a number between 1 and 10</p>
+
+        <input type="number" id="guessInput" min="1" max="10">
+        <button onclick="checkGuess()">Submit Guess</button>
+
+        <p id="result"></p>
+
+        <button id="retryButton" onclick="resetGame()" disabled>Retry</button>
+    </div>
+
+    <script>
+        // Generate a random number between 1 and 10
+        let correctNumber = Math.floor(Math.random() * 10) + 1;
+
+        // Variables to track the number of chances
+        let chances = 3;
+
+        function checkGuess() {
+            const guessInput = document.getElementById("guessInput");
+            const resultDisplay = document.getElementById("result");
+            const retryButton = document.getElementById("retryButton");
+
+            // Validate user input
+            const userGuess = parseInt(guessInput.value);
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 10) {
+                alert("Please enter a valid number between 1 and 10.");
+                return;
+            }
+
+            // Check if the guess is correct
+            if (userGuess === correctNumber) {
+                resultDisplay.textContent = "Congratulations! You guessed the correct number!";
+                retryButton.disabled = false; // Enable retry button
+            } else {
+                chances--;
+                if (chances > 0) {
+                    const hint = userGuess < correctNumber ? "Too low. Try a higher number." : "Too high. Try a lower number.";
+                    resultDisplay.textContent = `${hint} You have ${chances} ${chances === 1 ? 'chance' : 'chances'} left.`;
+                } else {
+                    resultDisplay.textContent = `Sorry, you ran out of chances. The correct number was ${correctNumber}.`;
+                    retryButton.disabled = false; // Enable retry button
+                }
+            }
+        }
+
+        function resetGame() {
+            // Reset variables and UI for a new game
+            chances = 3;
+            document.getElementById("result").textContent = "";
+            document.getElementById("guessInput").value = "";
+            document.getElementById("retryButton").disabled = true;
+            correctNumber = Math.floor(Math.random() * 10) + 1;
+        }
+    </script>
+</body>
+</html>
